@@ -1,2 +1,5 @@
 require 'spree/core'
 require 'spree_direct_express/engine'
+require 'direct_express'
+require 'direct_express/client'
+require 'direct_express/service'
