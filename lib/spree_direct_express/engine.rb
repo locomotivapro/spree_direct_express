@@ -24,9 +24,9 @@ module SpreeDirectExpress
     initializer "spree_direct_express.register.calculators", after: 'spree.register.calculators' do |app|
       file = File.join(File.dirname(__FILE__), "../../app/models/spree/calculator/shipping/direct_express.rb")
       Rails.env.production? ? require(file) : load(file)
+
+      app.config.spree.calculators.shipping_methods << Spree::Calculator::Shipping::DirectExpress
     end
 
-    app.config.spree.calculators.shipping_methods << Spree::Calculator::Shipping::DirectExpress
   end
-
 end

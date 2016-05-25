@@ -12,7 +12,7 @@ module DirectExpress
 
     private
 
-    ResponseResult = Struct.new(:amount, :days)
+    ResponseResult = Struct.new(:price, :days)
 
     def parse_hash
       response_string = @response_hash[t(:compute_response)][t(:compute_result)]

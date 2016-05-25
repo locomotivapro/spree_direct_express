@@ -1,8 +1,3 @@
-require 'savon'
-require 'direct_express/client'
-require 'direct_express/translator'
-require 'direct_express/parser'
-
 module DirectExpress
 
   module Config
@@ -20,7 +15,3 @@ module DirectExpress
   extend Config
 
 end
-
-#client = DirectExpress::Client.new
-#params = { login: '8333', weight: '2', zipcode: '03146020', amount: '250' }
-#p client.calculate(params)
