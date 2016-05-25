@@ -8,38 +8,44 @@ module Spree
 
       def available?(package)
         !compute(package).nil?
-      #rescue Spree::ShippingError
-        #false
+      rescue Spree::ShippingError
+        false
       end
 
       def self.description
-        'Integrate with Direct Express courrier'
+        'Direct Express'
       end
 
       def compute_package(package)
         order = package.order
-        response = retrieve_rate_from_cache(package, order)
+        response = retrieve_response_from_cache(package, order)
 
         return nil if response.kind_of?(Spree::ShippingError)
-        return nil if response == 0.0
+        return nil if response.price == 0.0
 
-        return response
+        return response.price
       end
 
       private
 
-      def retrieve_rate(package, order)
-        environment = Rails.env.to_sym
-        params = {
-          login: self.preferred_login,
-          weight: package_weight(package),
-          zipcode: order.ship_address.zipcode,
-          amount: order.total.to_f
-        }
+      def retrieve_response(package, order)
+        begin
+          environment = Rails.env.to_sym
+          params = {
+            login: self.preferred_login,
+            weight: package_weight(package),
+            zipcode: order.ship_address.zipcode,
+            amount: order.total.to_f
+          }
 
-        webservice_client = ::DirectExpress::Client.new(environment)
-        response = webservice_client.calculate(params)
-        response.price
+          webservice_client = ::DirectExpress::Client.new(environment)
+          response = webservice_client.calculate(params)
+          response
+        rescue => e
+          error = Spree::ShippingError.new("#{I18n.t(:shipping_error)}: #{e.message}")
+          Rails.cache.write @cache_key, error #write error to cache to prevent constant re-lookups
+          raise error
+        end
       end
 
       def cache_key(package, order)
@@ -65,9 +71,9 @@ module Spree
         package_weight
       end
 
-      def retrieve_rate_from_cache(package, order)
+      def retrieve_response_from_cache(package, order)
         Rails.cache.fetch(cache_key(package, order)) do
-          retrieve_rate(package, order)
+          retrieve_response(package, order)
         end
       end
 

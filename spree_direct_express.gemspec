@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version     = SpreeDirectExpress::VERSION
   s.summary     = 'Gem for spree and Direct Express Carrier'
   s.description = 'Gem for spree and Direct Express Carrier'
-  s.required_ruby_version = '>= 1.9'
+  s.required_ruby_version = '>= 2.1'
 
    s.author    = 'Denis Tierno, Fabio Esposito'
    s.email     = 'contato@locomotiva.pro'
@@ -19,10 +19,9 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  #s.add_dependency 'spree_core', '~> 3.2.0.alpha'
+  s.add_dependency 'spree_core', '>= 3.1.0.beta'
   s.add_dependency 'savon'
 
-  s.add_development_dependency 'capybara', '1.0.1'
   s.add_development_dependency 'factory_girl', '~> 2.6.4'
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'rspec-rails',  '~> 2.9'
